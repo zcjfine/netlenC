@@ -7,9 +7,9 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zconf.h>
+#include <unistd.h>
 
-# define MESSAGE_SIZE 1024000
+# define MESSAGE_SIZE 10240
 
 /* 创建tcp 服务器 */
 int main(){
