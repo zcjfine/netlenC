@@ -9,4 +9,5 @@ Makefile
 cmake_install.cmake
 .vscode/*
 .clion*
+.DS_Store
 
