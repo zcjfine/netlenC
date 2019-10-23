@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-# define MESSAGE_SIZE 10240
 
 /* 创建tcp 服务器 */
 int main(){
@@ -48,7 +47,6 @@ int main(){
 
     //循环接收客户端连接请求
     for (;;) {
-        printf("sdfds");
         clielen = sizeof(clientAddr); //计算 ipv4类型地址长度
         //等待接收客户端连接请求,
         // 连接到达后，打开一个新的套接字与之通信，
@@ -56,34 +54,37 @@ int main(){
         // 并将* ADDR_LEN设置为该地址的实际长度，
         // 然后返回新套接字的描述符，或者-1表示错误。
         connectfd = accept(listenfd,(struct sockaddr *) &clientAddr,&clielen);
-        if(connectfd > 0){
-            //连接建立 开始读取数据
-            char *query; //申明字符串指针
-            query = malloc(MESSAGE_SIZE + 1);
-            for(int i =0 ;i < MESSAGE_SIZE;i++){
-                query[i]='a';
-            }
-            query[MESSAGE_SIZE] = '\0';
-
-            const char *chars; //字符串常量参数声明
-            chars=query;  //赋值
-            size_t remaining = strlen(query); //计算字符串的长度
-            while (remaining) { //如果还有没法送完的长度
-                // 向连接套接字发送数据，字符串，字符串长度，最后一个flags，一般为0，用于发送tcp
-                int n_written = send(connectfd, chars, remaining, 0);
-                fprintf(stdout, "send into buffer %ld \n", n_written);
-                if (n_written <= 0) {
-                    fprintf(stderr, ": %s (%d)\n", strerror(errno),"send filed");
-                    break;
-                }
-                remaining -= n_written;
-                chars +=n_written;
-            }
-            close(connectfd);
-        } else {
+        if(connectfd < 0){
             perror("accept connetion");
             exit(0);
-
         }
+        char readchaa[1024];
+        for (;;) {
+            size_t readlen = sizeof(readchaa);
+            char *readChars = &readchaa;
+            while (readlen > 0) {
+                int len=0;
+                len = read(connectfd, readChars, readlen);
+                if (len < 0) {
+                    if (errno == EINTR)
+                        continue;
+                    else
+                        perror("read");
+                        return (-1);
+                } else {
+                    if (len == 0) {
+                        break;
+                    }
+                }
+                readlen -= len;
+                readChars += len;
+            }
+            //    bind(socketfd,)
+            if(readlen < 1024) {
+                fprintf(stdout, "read 1024byte for %s \n", &readchaa);
+            } else
+                break;
+        }
+
     }
 }
