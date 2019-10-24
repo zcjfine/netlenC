@@ -66,13 +66,13 @@ int main(){
                 int len=0;
                 len = read(connectfd, readChars, readlen);
                 if (len < 0) {
-                    if (errno == EINTR)
+                    if (errno == EINTR)   /* 考虑非阻塞的情况，这里需要再次调用read */
                         continue;
                     else
                         perror("read");
                         return (-1);
                 } else {
-                    if (len == 0) {
+                    if (len == 0) {  /* EOF(End of File)表示套接字关闭 */
                         break;
                     }
                 }

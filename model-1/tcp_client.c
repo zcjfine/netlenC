@@ -10,17 +10,23 @@
 #include <unistd.h>
 #include <errno.h>
 
-#define MESSAGE_SIZE 1024
+#define MESSAGE_SIZE 102400
 
-int main() {
+int main(int argc,char **argv) {
 
     int socketfd = socket(AF_INET, SOCK_STREAM, 0);
 
     struct sockaddr_in serverAddr;
 
+
+    if (argc != 2)
+        error(1, 0, "usage: tcpclient <IPaddress>");
+
+
     bzero(&serverAddr, sizeof(serverAddr));
     serverAddr.sin_port = htons(12345);
-    serverAddr.sin_addr.s_addr = htonl(0x7f000001);
+    //serverAddr.sin_addr.s_addr = htonl();   //0x7f000001 127.0.0.1的16进制 htonl()用于把数字转为网络地址
+    inet_pton(AF_INET, argv[1], &serverAddr.sin_addr); //inet_pton() 用于把 字符串值转换为网络地址
     serverAddr.sin_family = AF_INET;
 
     const struct sockaddr *connsockaddr;
