@@ -1,5 +1,5 @@
-add_executable(tcp_server tcp_server.c)
+add_executable(model-1.tcp_server tcp_server.c)
 
-add_executable(main.c main.c)
+add_executable(model-1.main main.c)
 
-add_executable(tcp_client.c tcp_client.c)
+add_executable(model-1.tcp_client tcp_client.c)
