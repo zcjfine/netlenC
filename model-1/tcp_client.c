@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include <arpa/inet.h>
+
 
 #define MESSAGE_SIZE 102400
 
@@ -19,8 +21,11 @@ int main(int argc,char **argv) {
     struct sockaddr_in serverAddr;
 
 
-    if (argc != 2)
-        error(1, 0, "usage: tcpclient <IPaddress>");
+    if (argc != 2){
+        fprintf(stderr,"usage: tcpclient <IPaddress>");
+        exit(EXIT_FAILURE);
+    }
+
 
 
     bzero(&serverAddr, sizeof(serverAddr));

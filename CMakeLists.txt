@@ -32,4 +32,5 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 
 add_subdirectory(lib/)
 add_subdirectory(model-1/)
-
+add_subdirectory(model-2/)
+add_subdirectory(midhomework/)
